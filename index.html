@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07080c">
+<title>Nile — Clinic Arabic for Medical Students</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. RESET & TOKENS
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --f-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --f-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-ar: 'Cairo', system-ui, sans-serif;
+
+  --bg:      #07080c;
+  --bg-2:    #0a0c11;
+  --surface: #10121a;
+  --surface-2: #151822;
+  --surface-3: #1c2030;
+
+  --line:   rgba(255, 255, 255, .07);
+  --line-2: rgba(255, 255, 255, .13);
+
+  --text:  #e9ecf4;
+  --muted: #8a92a6;
+  --dim:   #565d72;
+
+  --teal:   #4fd1c5;
+  --sky:    #7dd3fc;
+  --rose:   #f9a8d4;
+  --violet: #a78bfa;
+  --gold:   #e0bb78;
+  --lime:   #a3e635;
+  --orange: #fb923c;
+
+  --ease:   cubic-bezier(.22, 1, .36, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: var(--f-ui);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  padding-bottom: 90px;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ambient mesh background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(720px 520px at 8% -12%, rgba(79, 209, 197, .10), transparent 70%),
+    radial-gradient(780px 560px at 96% 2%,  rgba(224, 187, 120, .08), transparent 72%),
+    radial-gradient(620px 520px at 50% 108%, rgba(167, 139, 250, .07), transparent 70%);
+}
+
+::selection { background: rgba(79, 209, 197, .32); color: var(--text); }
+
+* { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 9px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-track { background: transparent; }
+
+:focus-visible {
+  outline: 2px solid rgba(79, 209, 197, .8);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+button { font-family: inherit; }
+
+/* ============================================================
+   2. TOP BAR
+   ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 3vw, 28px);
+  padding: 14px clamp(16px, 4vw, 32px);
+  background: rgba(7, 8, 12, .78);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--line);
+  animation: fadeDown .7s var(--ease) both;
+}
+
+.brand { display: flex; align-items: center; gap: 11px; flex: none; }
+
+.mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--teal);
+  background: linear-gradient(145deg, rgba(79, 209, 197, .22), var(--surface-2));
+  border: 1px solid var(--line-2);
+  box-shadow: 0 8px 24px -12px rgba(79, 209, 197, .7);
+}
+.mark svg { width: 21px; height: 21px; }
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text b {
+  font-family: var(--f-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.brand-text span {
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.overall {
+  flex: 1;
+  min-width: 0;
+  max-width: 460px;
+  display: grid;
+  gap: 7px;
+  margin-left: auto;
+}
+.overall-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.overall-row b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  font-size: 12px;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .06);
+  overflow: hidden;
+}
+.bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--teal), var(--sky));
+  box-shadow: 0 0 16px -4px rgba(79, 209, 197, .85);
+  transition: width .7s var(--ease);
+}
+
+.pct {
+  font-family: var(--f-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+  min-width: 62px;
+  text-align: right;
+  flex: none;
+}
+
+.reset {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line-2);
+  padding: 9px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  flex: none;
+  transition: .28s var(--ease);
+}
+.reset:hover {
+  color: var(--rose);
+  border-color: rgba(249, 168, 212, .45);
+  background: rgba(249, 168, 212, .07);
+}
+.reset:active { transform: scale(.96); }
+
+/* ============================================================
+   3. LAYOUT
+   ============================================================ */
+.wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) clamp(16px, 4vw, 32px) 40px;
+}
+
+/* ============================================================
+   4. INTRO
+   ============================================================ */
+.intro {
+  max-width: 640px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  animation: fadeUp .8s var(--ease) .1s both;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.eyebrow::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: var(--gold);
+  opacity: .85;
+}
+
+.intro h1 {
+  font-family: var(--f-display);
+  font-size: clamp(34px, 5.4vw, 58px);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.02;
+  margin-bottom: 18px;
+}
+.intro h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.lede {
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 22px;
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--dim);
+  font-weight: 500;
+}
+.meta-line span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.meta-line .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+/* ============================================================
+   5. TOPIC PROGRESS GRID
+   ============================================================ */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.section-head h2 {
+  font-family: var(--f-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-head h2::after {
+  content: '';
+  flex: 1;
+  min-width: 30px;
+  height: 1px;
+  background: var(--line);
+}
+.section-head .hint {
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: .04em;
+}
+
+.topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: clamp(30px, 4vw, 46px);
+}
+
+.topic {
+  text-align: left;
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: .3s var(--ease);
+  animation: cardIn .5s var(--ease) both;
+  animation-delay: var(--d, 0ms);
+}
+.topic:hover {
+  border-color: var(--line-2);
+  transform: translateY(-2px);
+}
+.topic.on {
+  border-color: var(--c);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .01)), var(--surface);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--c) 14%, transparent),
+    0 16px 34px -22px var(--c);
+}
+
+.topic-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.topic-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--text);
+}
+.topic-ar {
+  font-family: var(--f-ar);
+  font-size: 12.5px;
+  color: var(--dim);
+  transition: color .3s var(--ease);
+}
+.topic.on .topic-ar { color: var(--c); }
+
+.topic .bar { height: 6px; }
+.topic .bar > i {
+  background: var(--c);
+  box-shadow: 0 0 14px -3px var(--c);
+}
+
+.topic-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+}
+.topic.on .topic-foot { color: var(--muted); }
+.topic-pct { color: var(--muted); }
+
+/* ============================================================
+   6. CONTROLS
+   ============================================================ */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.search {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+.search svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 16px;
+  height: 16px;
+  color: var(--dim);
+  pointer-events: none;
+  transition: color .25s var(--ease);
+}
+.search input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px 16px 13px 42px;
+  outline: none;
+  transition: .25s var(--ease);
+}
+.search input::placeholder { color: var(--dim); }
+.search input:focus {
+  border-color: rgba(79, 209, 197, .42);
+  background: var(--surface-2);
+}
+.search:focus-within svg { color: var(--teal); }
+
+.clear-filter {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 11px 16px;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: .25s var(--ease);
+  display: none;
+}
+.clear-filter.show { display: inline-block; }
+.clear-filter:hover {
+  color: var(--text);
+  border-color: var(--line-2);
+}
+
+.count-note {
+  font-size: 11.5px;
+  color: var(--dim);
+  letter-spacing: .03em;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   7. PHRASE CARDS
+   ============================================================ */
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.phrase {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: start;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .032), rgba(255, 255, 255, .008));
+  border: 1px solid var(--line);
+  transition: border-color .3s var(--ease), background .3s var(--ease),
+              transform .3s var(--ease);
+  animation: cardIn .5s var(--ease) both;
+  animation-delay: var(--d, 0ms);
+}
+.phrase:hover {
+  border-color: var(--line-2);
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .012));
+}
+.phrase.done {
+  border-color: color-mix(in srgb, var(--c) 32%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 8%, transparent), rgba(255, 255, 255, .008));
+}
+
+/* ---- checkbox ---- */
+.check {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  margin-top: 2px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .18);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background .28s var(--ease), border-color .28s var(--ease),
+              box-shadow .35s var(--ease);
+}
+.check:hover { border-color: rgba(255, 255, 255, .38); }
+.check:active { transform: scale(.9); }
+.check svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: #07080c;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  transition: stroke-dashoffset .3s ease .04s;
+}
+.phrase.done .check {
+  background: var(--c);
+  border-color: var(--c);
+  box-shadow: 0 0 20px -5px var(--c);
+}
+.phrase.done .check svg { stroke-dashoffset: 0; }
+
+/* ---- body ---- */
+.p-body { min-width: 0; }
+
+.p-ar {
+  font-family: var(--f-ar);
+  font-size: clamp(20px, 2.2vw, 24px);
+  font-weight: 700;
+  line-height: 1.55;
+  direction: rtl;
+  text-align: right;
+  margin-bottom: 6px;
+  transition: color .3s var(--ease);
+}
+.phrase.done .p-ar { color: color-mix(in srgb, var(--text) 78%, var(--c)); }
+
+.p-tr {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: .005em;
+  margin-bottom: 3px;
+}
+
+.p-en {
+  font-size: 13px;
+  color: var(--text);
+  opacity: .88;
+  line-height: 1.5;
+}
+
+.p-note {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--dim);
+  display: flex;
+  gap: 8px;
+}
+.p-note::before {
+  content: '›';
+  color: var(--c);
+  font-weight: 700;
+  flex: none;
+}
+
+/* ---- play button ---- */
+.play {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  color: var(--c);
+  transition: .25s var(--ease);
+}
+.play:hover {
+  background: color-mix(in srgb, var(--c) 26%, transparent);
+  transform: scale(1.07);
+}
+.play:active { transform: scale(.93); }
+.play svg { width: 16px; height: 16px; margin-left: 2px; }
+.play.playing { animation: pulse 1s ease-out infinite; }
+
+/* ---- empty state ---- */
+.empty {
+  padding: 60px 24px;
+  text-align: center;
+  border: 1px dashed var(--line-2);
+  border-radius: 18px;
+  color: var(--muted);
+  font-size: 14px;
+  animation: fadeUp .4s var(--ease) both;
+}
+.empty b {
+  display: block;
+  font-family: var(--f-display);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   8. FOOTER
+   ============================================================ */
+.foot {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px) 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--dim);
+}
+
+.voice-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.voice-note .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dim);
+  flex: none;
+  transition: .3s var(--ease);
+}
+.voice-note.ok .dot {
+  background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(79, 209, 197, .15);
+}
+.voice-note.warn .dot {
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(224, 187, 120, .15);
+}
+
+/* ============================================================
+   9. TOAST
+   ============================================================ */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  translate: -50% 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 99px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-2);
+  color: var(--text);
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .9);
+  max-width: min(90vw, 440px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+  transition: .42s var(--spring);
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+#toast .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex: none;
+}
+
+/* ============================================================
+   10. KEYFRAMES
+   ============================================================ */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 50%, transparent); }
+  70%  { box-shadow: 0 0 0 12px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ============================================================
+   11. RESPONSIVE
+   ============================================================ */
+@media (max-width: 720px) {
+  .brand-text span { display: none; }
+  .reset { padding: 9px 12px; font-size: 11.5px; }
+  .pct { font-size: 18px; min-width: 50px; }
+}
+
+@media (max-width: 560px) {
+  .topbar { gap: 10px; padding: 12px 14px; }
+  .overall { max-width: none; }
+  .overall-row span:first-child { display: none; }
+  .overall-row { justify-content: flex-end; }
+  .mark { width: 36px; height: 36px; }
+  .brand-text b { font-size: 16px; }
+  .reset { display: none; }
+
+  .phrase {
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    padding: 15px;
+  }
+  .play {
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: 34px;
+    height: 34px;
+    margin-top: -4px;
+  }
+  .topics { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .count-note { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ TOP BAR ══════════════════════ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 18c0-6 3-9 8-9s8 3 8 9"/>
+        <path d="M12 9V4"/>
+        <circle cx="12" cy="3" r="1.2"/>
+        <path d="M7 18h10"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <b>Nile</b>
+      <span>Clinic Arabic · Egypt</span>
+    </div>
+  </div>
+
+  <div class="overall">
+    <div class="overall-row">
+      <span>Overall progress</span>
+      <b><span id="overallDone">0</span> / <span id="overallTotal">36</span></b>
+    </div>
+    <div class="bar"><i id="overallFill"></i></div>
+  </div>
+
+  <div class="pct" id="overallPct">0%</div>
+  <button class="reset" id="resetBtn">Reset</button>
+</header>
+
+<!-- ══════════════════════ MAIN ══════════════════════ -->
+<main class="wrap">
+
+  <section class="intro">
+    <p class="eyebrow">Cairo · Clinical rotations</p>
+    <h1>Speak the <em>clinic</em>.</h1>
+    <p class="lede">
+      Thirty-six Egyptian Arabic phrases a foreign medical student actually needs
+      on the wards — from taking a history to giving instructions at the pharmacy.
+      Tap the circle as you learn each one, and press play to hear it spoken.
+    </p>
+    <div class="meta-line">
+      <span><span class="dot"></span><b id="phraseCount">36</b>&nbsp;phrases</span>
+      <span><span class="dot"></span><b>7</b>&nbsp;topics</span>
+      <span><span class="dot"></span>Saved on this device</span>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2>Progress by topic</h2>
+    <span class="hint">Tap a topic to filter</span>
+  </div>
+  <section class="topics" id="topics"></section>
+
+  <div class="section-head">
+    <h2>Phrases</h2>
+    <span class="hint" id="activeFilter">All topics</span>
+  </div>
+
+  <div class="controls">
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <input id="searchInput" type="search" placeholder="Search Arabic, transliteration or English…" aria-label="Search phrases">
+    </label>
+    <button class="clear-filter" id="clearFilter">Clear filter</button>
+    <span class="count-note" id="countNote">36 shown</span>
+  </div>
+
+  <section class="list" id="list" aria-live="polite"></section>
+
+</main>
+
+<footer class="foot">
+  <div class="voice-note" id="voiceNote">
+    <span class="dot"></span>
+    <span id="voiceNoteText">Checking for Arabic voices…</span>
+  </div>
+  <span style="margin-left:auto">Audio uses your device's speech engine</span>
+</footer>
+
+<div id="toast" role="status" aria-live="polite">
+  <span class="dot"></span>
+  <span id="toastText">Saved</span>
+</div>
+
+<script>
+(function () {
+'use strict';
+
+/* ============================================================
+   0. TINY HELPERS
+   ============================================================ */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+const esc = s => String(s).replace(/[&<>"']/g, c => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+const store = {
+  get(key, fallback) {
+    try {
+      const raw = localStorage.getItem('nile.' + key);
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (e) { return fallback; }
+  },
+  set(key, value) {
+    try { localStorage.setItem('nile.' + key, JSON.stringify(value)); }
+    catch (e) { /* storage unavailable */ }
+  }
+};
+
+let toastTimer;
+function toast(message) {
+  $('#toastText').textContent = message;
+  $('#toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2400);
+}
+
+/* ============================================================
+   1. DATA
+   ============================================================ */
+const CATEGORIES = [
+  { id: 'greetings',    name: 'Greetings',       ar: 'التحيات',        hue: 'var(--teal)' },
+  { id: 'history',      name: 'Patient History', ar: 'التاريخ المرضي', hue: 'var(--sky)' },
+  { id: 'symptoms',     name: 'Symptoms',        ar: 'الأعراض',        hue: 'var(--rose)' },
+  { id: 'exam',         name: 'Examination',     ar: 'الفحص',          hue: 'var(--violet)' },
+  { id: 'instructions', name: 'Instructions',    ar: 'التعليمات',      hue: 'var(--gold)' },
+  { id: 'pharmacy',     name: 'Pharmacy',        ar: 'الصيدلية',       hue: 'var(--lime)' },
+  { id: 'campus',       name: 'Campus',          ar: 'الجامعة',        hue: 'var(--orange)' }
+];
+
+const PHRASES = [
+  /* ---------- Greetings ---------- */
+  { id: 'g1', cat: 'greetings', ar: 'إزيك؟', tr: 'Ezzayyak?', en: 'How are you? (to a man)',
+    note: 'The default opener with any male patient or colleague.' },
+  { id: 'g2', cat: 'greetings', ar: 'إزيكي؟', tr: 'Ezzayyik?', en: 'How are you? (to a woman)',
+    note: 'The ending changes with gender — use this with female patients.' },
+  { id: 'g3', cat: 'greetings', ar: 'صباح الخير', tr: 'Sabah el-kheir', en: 'Good morning',
+    note: 'Ward rounds in Egypt usually begin before 9am.' },
+  { id: 'g4', cat: 'greetings', ar: 'أهلاً وسهلاً', tr: 'Ahlan wa sahlan', en: 'Welcome',
+    note: 'Greet a patient as they enter the clinic.' },
+  { id: 'g5', cat: 'greetings', ar: 'شكراً جزيلاً', tr: 'Shukran gazilan', en: 'Thank you very much',
+    note: 'A warm way to close a consultation.' },
+  { id: 'g6', cat: 'greetings', ar: 'مع السلامة', tr: 'Maʿa el-salama', en: 'Goodbye',
+    note: 'Say it as the patient leaves the room.' },
+
+  /* ---------- Patient History ---------- */
+  { id: 'h1', cat: 'history', ar: 'اسمك إيه؟', tr: 'Esmak eh?', en: "What's your name?",
+    note: 'The first question on any intake form.' },
+  { id: 'h2', cat: 'history', ar: 'عندك كام سنة؟', tr: 'ʿAndak kam sana?', en: 'How old are you?',
+    note: 'Ask before you fill in the age field.' },
+  { id: 'h3', cat: 'history', ar: 'إيه اللي بيوجعك؟', tr: 'Eh elli beywaggaʿak?', en: "What's hurting you?",
+    note: 'Open-ended first question — let the patient talk.' },
+  { id: 'h4', cat: 'history', ar: 'من إمتى الوجع ده؟', tr: 'Men emta el-wagaʿ da?', en: 'Since when has this pain been there?',
+    note: 'Duration is critical for triage.' },
+  { id: 'h5', cat: 'history', ar: 'بتاخد دوا؟', tr: 'Betakhod dawa?', en: 'Are you taking any medication?',
+    note: 'Ask before prescribing anything new.' },
+  { id: 'h6', cat: 'history', ar: 'عندك حساسية من حاجة؟', tr: 'ʿAndak hasasiyya men haga?', en: 'Do you have any allergies?',
+    note: 'Mandatory before any drug is given.' },
+  { id: 'h7', cat: 'history', ar: 'في تاريخ مرضي في العيلة؟', tr: 'Fi tarikh maradi fel-ʿela?', en: 'Is there any family medical history?',
+    note: 'Especially important for cardiac and diabetic patients.' },
+
+  /* ---------- Symptoms ---------- */
+  { id: 's1', cat: 'symptoms', ar: 'عندي صداع', tr: 'ʿAndi sodaʿ', en: 'I have a headache',
+    note: 'You will hear this constantly in the outpatient clinic.' },
+  { id: 's2', cat: 'symptoms', ar: 'عندي سخونية', tr: 'ʿAndi sokhoniya', en: 'I have a fever',
+    note: 'The colloquial word patients use — not حرارة.' },
+  { id: 's3', cat: 'symptoms', ar: 'بطني بتوجعني', tr: 'Batni betwaggaʿni', en: 'My stomach hurts',
+    note: 'Note the order: body part first, then the verb.' },
+  { id: 's4', cat: 'symptoms', ar: 'حاسس بدوخة', tr: 'Hases bedokha', en: 'I feel dizzy',
+    note: 'A red flag in elderly patients — take it seriously.' },
+  { id: 's5', cat: 'symptoms', ar: 'عندي كحة', tr: 'ʿAndi kokha', en: 'I have a cough',
+    note: 'Your next question should be: dry or productive?' },
+  { id: 's6', cat: 'symptoms', ar: 'مش قادر أتنفس', tr: 'Mesh ʾader atnaffas', en: "I can't breathe",
+    note: 'Emergency phrase — learn it cold.' },
+
+  /* ---------- Examination ---------- */
+  { id: 'e1', cat: 'exam', ar: 'افتح بقك لو سمحت', tr: 'Eftah boʾak law samaht', en: 'Open your mouth please',
+    note: 'Before any throat or dental examination.' },
+  { id: 'e2', cat: 'exam', ar: 'خد نفس عميق', tr: 'Khod nafas ʿamiʾ', en: 'Take a deep breath',
+    note: 'Chest auscultation — repeat as needed.' },
+  { id: 'e3', cat: 'exam', ar: 'نام على السرير', tr: 'Nam ʿala el-sirir', en: 'Lie on the bed',
+    note: 'For an abdominal or full examination.' },
+  { id: 'e4', cat: 'exam', ar: 'ابسط إيدك', tr: 'Ebsat idak', en: 'Stretch out your arm',
+    note: 'For blood pressure or cannulation.' },
+  { id: 'e5', cat: 'exam', ar: 'هحط السماعة', tr: 'Hahott el-sammaʿa', en: "I'll put the stethoscope on",
+    note: 'Always warn the patient before you touch them.' },
+
+  /* ---------- Instructions ---------- */
+  { id: 'i1', cat: 'instructions', ar: 'خد الدوا تلات مرات في اليوم', tr: 'Khod el-dawa talat marrat fel-yom', en: 'Take the medicine three times a day',
+    note: '“Fel-yom” means per day — not “every day”.' },
+  { id: 'i2', cat: 'instructions', ar: 'لازم ترتاح', tr: 'Lazem tertah', en: 'You must rest',
+    note: 'Soft but firm — the most common piece of advice.' },
+  { id: 'i3', cat: 'instructions', ar: 'ارجع لي بعد أسبوع', tr: 'Ergaʿ li baʿd osbuʿ', en: 'Come back in a week',
+    note: 'How follow-up appointments are scheduled.' },
+  { id: 'i4', cat: 'instructions', ar: 'متاكلش حاجة قبل التحليل', tr: 'Metakolsh haga ʾabl el-tahlil', en: "Don't eat anything before the test",
+    note: 'Fasting instructions — say it slowly and clearly.' },
+
+  /* ---------- Pharmacy ---------- */
+  { id: 'p1', cat: 'pharmacy', ar: 'عايز دوا للصداع', tr: 'ʿAyez dawa lel-sodaʿ', en: 'I want medicine for a headache',
+    note: 'What a patient says at the pharmacy counter.' },
+  { id: 'p2', cat: 'pharmacy', ar: 'فيه بديل أرخص؟', tr: 'Fih badil arkhas?', en: 'Is there a cheaper alternative?',
+    note: 'Brand versus generic — a very common ask.' },
+  { id: 'p3', cat: 'pharmacy', ar: 'الجرعة كام؟', tr: 'El-gorʿa kam?', en: "What's the dose?",
+    note: 'Confirm the dose before you hand over the box.' },
+  { id: 'p4', cat: 'pharmacy', ar: 'الدوا ده بيجيب نعاس؟', tr: 'El-dawa da beygib noʿas?', en: 'Does this medicine cause drowsiness?',
+    note: 'Matters for students, drivers and anyone operating machinery.' },
+
+  /* ---------- Campus ---------- */
+  { id: 'c1', cat: 'campus', ar: 'أنا طالب طب', tr: 'Ana taleb tebb', en: "I'm a medical student",
+    note: 'Introduce yourself to staff and patients.' },
+  { id: 'c2', cat: 'campus', ar: 'إمتى المحاضرة؟', tr: 'Emta el-mohadara?', en: 'When is the lecture?',
+    note: 'A daily survival phrase in first year.' },
+  { id: 'c3', cat: 'campus', ar: 'فين المستشفى الجامعي؟', tr: 'Fein el-mostashfa el-gamʿi?', en: 'Where is the university hospital?',
+    note: '“Fein” = where — the single most useful word you will learn.' },
+  { id: 'c4', cat: 'campus', ar: 'مش فاهم، ممكن تعيد؟', tr: 'Mesh fahem, momken tʿeid?', en: "I don't understand, can you repeat?",
+    note: 'Honest and respectful — use it freely.' }
+];
+
+/* ============================================================
+   2. STATE
+   ============================================================ */
+const learned = new Set(store.get('learned', []));
+const state = {
+  filter: 'all',
+  search: ''
+};
+
+/* ============================================================
+   3. SPEECH (TTS)
+   ============================================================ */
+const TTS = {
+  voice: null,
+  init() {
+    if (!('speechSynthesis' in window)) { updateVoiceUI(); return; }
+
+    const load = () => {
+      const voices = speechSynthesis.getVoices();
+      const arabic = voices.filter(v => /^ar/i.test(v.lang));
+      this.voice =
+        arabic.find(v => /EG|Egypt/i.test(v.lang + ' ' + v.name)) ||
+        arabic.find(v => /SA|AE|JO|LB|SY|IQ|MA|TN|DZ/i.test(v.lang)) ||
+        arabic[0] || null;
+      updateVoiceUI();
+    };
+
+    load();
+    speechSynthesis.addEventListener('voiceschanged', load);
+  },
+
+  speak(text, onEnd) {
+    if (!('speechSynthesis' in window)) {
+      toast('Speech synthesis is not supported here');
+      return null;
+    }
+    speechSynthesis.cancel();
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = this.voice ? this.voice.lang : 'ar-EG';
+    if (this.voice) u.voice = this.voice;
+    u.rate = 0.9;
+    u.pitch = 1;
+    u.onend = () => onEnd && onEnd();
+    u.onerror = () => onEnd && onEnd();
+
+    speechSynthesis.speak(u);
+    return u;
+  }
+};
+
+function updateVoiceUI() {
+  const note = $('#voiceNote');
+  const text = $('#voiceNoteText');
+  if (!note || !text) return;
+
+  if (!('speechSynthesis' in window)) {
+    note.className = 'voice-note warn';
+    text.textContent = 'Speech not supported in this browser';
+    return;
+  }
+  if (!TTS.voice) {
+    note.className = 'voice-note warn';
+    text.textContent = 'No Arabic voice installed — playback may sound off';
+    return;
+  }
+  note.className = 'voice-note ok';
+  text.textContent = 'Arabic voice ready · ' + TTS.voice.name;
+}
+
+/* ============================================================
+   4. RENDER — TOPIC GRID
+   ============================================================ */
+function renderTopics() {
+  $('#topics').innerHTML = CATEGORIES.map((c, i) => {
+    const total = PHRASES.filter(p => p.cat === c.id).length;
+    const done  = PHRASES.filter(p => p.cat === c.id && learned.has(p.id)).length;
+    const pct   = total ? Math.round(done / total * 100) : 0;
+
+    return `
+      <button
+        class="topic ${state.filter === c.id ? 'on' : ''}"
+        data-cat="${c.id}"
+        style="--c:${c.hue};--d:${i * 35}ms"
+        aria-pressed="${state.filter === c.id}">
+        <div class="topic-head">
+          <span class="topic-name">${esc(c.name)}</span>
+          <span class="topic-ar" dir="rtl" lang="ar">${esc(c.ar)}</span>
+        </div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="topic-foot">
+          <span class="topic-count">${done} / ${total}</span>
+          <span class="topic-pct">${pct}%</span>
+        </div>
+      </button>`;
+  }).join('');
+}
+
+/* ============================================================
+   5. RENDER — PHRASE LIST
+   ============================================================ */
+function renderList() {
+  const q = state.search.trim().toLowerCase();
+  const items = PHRASES.filter(p => {
+    if (state.filter !== 'all' && p.cat !== state.filter) return false;
+    if (!q) return true;
+    return (p.ar + ' ' + p.tr + ' ' + p.en + ' ' + (p.note || ''))
+      .toLowerCase()
+      .includes(q);
+  });
+
+  const listEl = $('#list');
+  const countNote = $('#countNote');
+  const activeFilter = $('#activeFilter');
+  const clearBtn = $('#clearFilter');
+
+  const activeCat = CATEGORIES.find(c => c.id === state.filter);
+  activeFilter.textContent = activeCat ? activeCat.name : 'All topics';
+  countNote.textContent = items.length + ' shown';
+
+  const hasFilter = state.filter !== 'all' || state.search.trim() !== '';
+  clearBtn.classList.toggle('show', hasFilter);
+
+  if (!items.length) {
+    listEl.innerHTML = `
+      <div class="empty">
+        <b>No phrases match</b>
+        Try a different word, or clear the filter to see all ${PHRASES.length} phrases.
+      </div>`;
+    return;
+  }
+
+  listEl.innerHTML = items.map((p, i) => {
+    const cat  = CATEGORIES.find(c => c.id === p.cat);
+    const done = learned.has(p.id);
+
+    return `
+      <article
+        class="phrase ${done ? 'done' : ''}"
+        data-id="${p.id}"
+        style="--c:${cat.hue};--d:${Math.min(i, 14) * 28}ms">
+
+        <button
+          class="check"
+          type="button"
+          role="checkbox"
+          aria-checked="${done}"
+          aria-label="Mark as learned: ${esc(p.en)}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+        </button>
+
+        <div class="p-body">
+          <div class="p-ar" dir="rtl" lang="ar">${esc(p.ar)}</div>
+          <div class="p-tr">${esc(p.tr)}</div>
+          <div class="p-en">${esc(p.en)}</div>
+          ${p.note ? `<div class="p-note">${esc(p.note)}</div>` : ''}
+        </div>
+
+        <button
+          class="play"
+          type="button"
+          aria-label="Play pronunciation: ${esc(p.en)}">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      </article>`;
+  }).join('');
+}
+
+/* ============================================================
+   6. PROGRESS UPDATES
+   ============================================================ */
+function updateProgress() {
+  const total = PHRASES.length;
+  const done = learned.size;
+  const pct = total ? Math.round(done / total * 100) : 0;
+
+  $('#overallDone').textContent = done;
+  $('#overallTotal').textContent = total;
+  $('#overallFill').style.width = pct + '%';
+  $('#overallPct').textContent = pct + '%';
+
+  // update every topic bar in place (no re-render → no flicker)
+  CATEGORIES.forEach(c => {
+    const t = PHRASES.filter(p => p.cat === c.id).length;
+    const d = PHRASES.filter(p => p.cat === c.id && learned.has(p.id)).length;
+    const p = t ? Math.round(d / t * 100) : 0;
+
+    const bar    = document.querySelector(`.topic[data-cat="${c.id}"] .bar > i`);
+    const count  = document.querySelector(`.topic[data-cat="${c.id}"] .topic-count`);
+    const pctEl  = document.querySelector(`.topic[data-cat="${c.id}"] .topic-pct`);
+
+    if (bar)   bar.style.width = p + '%';
+    if (count) count.textContent = d + ' / ' + t;
+    if (pctEl) pctEl.textContent = p + '%';
+  });
+}
+
+/* ============================================================
+   7. RENDER ALL
+   ============================================================ */
+function renderAll() {
+  renderTopics();
+  renderList();
+  updateProgress();
+  $('#phraseCount').textContent = PHRASES.length;
+  $('#overallTotal').textContent = PHRASES.length;
+}
+
+/* ============================================================
+   8. EVENTS — TOPICS (filter)
+   ============================================================ */
+$('#topics').addEventListener('click', e => {
+  const btn = e.target.closest('.topic');
+  if (!btn) return;
+
+  const id = btn.dataset.cat;
+  state.filter = (state.filter === id) ? 'all' : id;
+
+  renderTopics();
+  renderList();
+});
+
+/* ============================================================
+   9. EVENTS — SEARCH
+   ============================================================ */
+$('#searchInput').addEventListener('input', e => {
+  state.search = e.target.value;
+  renderList();
+});
+
+$('#clearFilter').addEventListener('click', () => {
+  state.filter = 'all';
+  state.search = '';
+  $('#searchInput').value = '';
+  renderTopics();
+  renderList();
+});
+
+/* ============================================================
+   10. EVENTS — CHECKBOX + PLAY (delegated)
+   ============================================================ */
+$('#list').addEventListener('click', e => {
+  const card = e.target.closest('.phrase');
+  if (!card) return;
+
+  const id = card.dataset.id;
+
+  /* ---- checkbox ---- */
+  const check = e.target.closest('.check');
+  if (check) {
+    const isDone = learned.has(id);
+
+    if (isDone) learned.delete(id);
+    else learned.add(id);
+
+    store.set('learned', [...learned]);
+
+    card.classList.toggle('done', !isDone);
+    check.setAttribute('aria-checked', String(!isDone));
+
+    if (!isDone) {
+      // little spring bounce on the tick
+      check.animate(
+        [
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.22)' },
+          { transform: 'scale(1)' }
+        ],
+        { duration: 300, easing: 'cubic-bezier(.34,1.56,.64,1)' }
+      );
+      toast('Marked as learned');
+    }
+
+    updateProgress();
+    return;
+  }
+
+  /* ---- play button ---- */
+  const play = e.target.closest('.play');
+  if (play) {
+    const phrase = PHRASES.find(p => p.id === id);
+    if (!phrase) return;
+
+    play.classList.add('playing');
+    TTS.speak(phrase.ar, () => play.classList.remove('playing'));
+
+    // safety net in case the onend event never fires
+    setTimeout(() => play.classList.remove('playing'), 4000);
+  }
+});
+
+/* ============================================================
+   11. EVENTS — RESET
+   ============================================================ */
+$('#resetBtn').addEventListener('click', () => {
+  if (!learned.size) {
+    toast('Nothing to reset yet');
+    return;
+  }
+  if (!confirm('Reset all learned phrases on this device?')) return;
+
+  learned.clear();
+  store.set('learned', []);
+
+  renderAll();
+  toast('Progress reset');
+});
+
+/* ============================================================
+   12. BOOT
+   ============================================================ */
+TTS.init();
+renderAll();
+
+// keep the UI honest if the page stays open across midnight
+setInterval(() => {
+  // nothing date-dependent in this view yet, but keeps future-proof
+}, 60000);
+
+})();
+</script>
+</body>
+</html>
